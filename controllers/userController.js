@@ -1,7 +1,7 @@
 const User = require("../models/userModel");
 const jwt = require("jsonwebtoken");
 
-const SECRET_KEY = "e38c27b9301e8b7d0d9e6b957f1d0a6c354b9a8c1a2f3e5f7c8e1b4d3a9f7b2c"; // Replace with a secure key
+const SECRET_KEY = process.env.SECRET_KEY || "your-fallback-secret-key";
 
 // Register User
 exports.registerUser = async (req, res) => {

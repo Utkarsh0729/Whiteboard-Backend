@@ -7,7 +7,8 @@ const { Server } = require("socket.io");
 const http = require("http");
 const Canvas = require("./models/canvasModel");
 const jwt = require("jsonwebtoken");
-const SECRET_KEY = "e38c27b9301e8b7d0d9e6b957f1d0a6c354b9a8c1a2f3e5f7c8e1b4d3a9f7b2c";
+
+const SECRET_KEY = process.env.SECRET_KEY || "your-fallback-secret-key";
 
 
 const userRoutes = require("./routes/userRoutes");
@@ -29,9 +30,11 @@ connectToDB();
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
-      origin: ["http://localhost:3000"], 
+      origin: process.env.CLIENT_URL || "http://localhost:3000", 
       methods: ["GET", "POST"],
+      credentials: true
     },
+    transports: ['websocket', 'polling']
   });
 
 let canvasData = {};
@@ -104,4 +107,5 @@ io.on("connection", (socket) => {
       });
     });
 
-server.listen(5000, () => console.log("Server running on port 5000"));
+const PORT = process.env.PORT || 5000;
+server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
